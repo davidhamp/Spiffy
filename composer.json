@@ -1,5 +1,5 @@
 {
-    "name": "DH/Spiffy",
+    "name": "davidhamp/Spiffy",
     "type": "framework",
     "description": "Simple PHP Framework",
     "keywords": ["framework", "php"],
@@ -14,7 +14,7 @@
     "require": {
         "php": ">5.4",
         "mustache/mustache": "trunk",
-        "symfony/yaml": "2.*",
+        "symfony/yaml": "2.*"
     },
     "autoload": {
         "psr-4": {"SPF\\": "src/"}
