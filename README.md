@@ -1,0 +1,2 @@
+# Spiffy
+Simple PHP Framework
