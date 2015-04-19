@@ -1,5 +1,5 @@
 {
-    "name": "DH/Spiffy",
+    "name": "dh/Spiffy",
     "type": "framework",
     "description": "Simple PHP Framework",
     "keywords": ["framework", "php"],
@@ -17,6 +17,6 @@
         "symfony/yaml": "2.*"
     },
     "autoload": {
-        "psr-4": {"SPF\\": "src/"}
+        "psr-4": {"SPF\\": "SPF/"}
     }
 }
