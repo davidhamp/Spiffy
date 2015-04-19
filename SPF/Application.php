@@ -30,12 +30,8 @@ class Application {
 
     public function run()
     {
-        // Build request
-        // Match route
-        // Instatiate controller
-        // Run controller
-
-        //Return response
+        // Inspect route
+        // Set controller/method
 
         if ($this->controller instanceof Controller && !empty($this->method)) {
             $this->controller->{$this->method}();

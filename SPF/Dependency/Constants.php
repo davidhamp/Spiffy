@@ -9,4 +9,6 @@ class Constants
 
     const ENVIRONMENT = 'Core\\Environment';
 
+    const MUSTACHE_ENGINE = 'Mustache\\MustacheEngine';
+
 }

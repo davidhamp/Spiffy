@@ -10,8 +10,7 @@ class Configuration
 
     public function __construct()
     {
-        $configFilePath = __BASE__ . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'config.yaml';
-        $this->config = Yaml::parse($configFilePath);
+        $this->config = Yaml::parse(__BASE__ . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'config.yaml');
     }
 
     public function get($key)
