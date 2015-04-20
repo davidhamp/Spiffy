@@ -40,12 +40,6 @@ class Application {
         }
     }
 
-    public function get($name)
-    {
-        die('we tried to get something, yay!  ' . $name);
-        //return $this->di($name);
-    }
-
     public function setController(Controller $controller)
     {
         $this->controller = $controller;

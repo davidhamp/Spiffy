@@ -12,6 +12,10 @@ class Environment
 
     protected $currentEnv = self::PRODUCTION;
 
+    /**
+     * @dmManaged
+     * @dmRequires SPF\Core\Configuration $config
+     */
     public function __construct(Configuration $config)
     {
         $env = $config->get('environment');

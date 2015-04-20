@@ -13,4 +13,10 @@ class Response {
     public function __construct()
     {}
 
+    public function setBody($body)
+    {
+        $this->body = $body;
+        return $this;
+    }
+
 }

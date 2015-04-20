@@ -5,10 +5,10 @@ namespace SPF\Dependency;
 class Constants
 {
 
-    const CONFIGURATION = 'Core\\Configuration';
+    const CONFIGURATION = 'SPF\\Core\\Configuration';
 
-    const ENVIRONMENT = 'Core\\Environment';
+    const ENVIRONMENT = 'SPF\\Core\\Environment';
 
-    const MUSTACHE_ENGINE = 'Mustache\\MustacheEngine';
+    const MUSTACHE_ENGINE = 'SPF\\Mustache\\MustacheEngine';
 
 }

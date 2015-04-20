@@ -29,7 +29,7 @@ class Controller {
     public function generateResponse()
     {
         if (!$this->validate()) {
-            throw new ControllerException("This controller isn't valid.  Either the view or model havne't been set correctly");
+            throw new ControllerException("This controller isn't valid.  Either the view or model haven't been set correctly");
         }
 
         $response = new Response();
