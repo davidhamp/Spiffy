@@ -3,8 +3,8 @@
 namespace SPF\Dependency\Providers\Mustache;
 
 use SPF\Dependency\Provider;
-use Mustache\Mustache_Engine;
-use Mustache\Mustache_Loader_FilesystemLoader;
+use Mustache_Engine;
+use Mustache_Loader_FilesystemLoader;
 
 class MustacheEngineProvider extends Provider
 {

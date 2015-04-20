@@ -8,6 +8,9 @@ class Configuration
 {
     protected $config;
 
+    /**
+     * @dmManaged
+     */
     public function __construct()
     {
         $this->config = Yaml::parse(__BASE__ . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'config.yaml');

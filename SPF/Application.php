@@ -3,6 +3,7 @@
 namespace SPF;
 
 use SPF\Dependency\DependencyManager;
+use SPF\Dependency\Constants;
 use SPF\Exceptions\ExceptionHandler;
 use SPF\Exceptions\ControllerException;
 use \Exception;
@@ -30,8 +31,15 @@ class Application {
 
     public function run()
     {
-        // Inspect route
-        // Set controller/method
+        $router = DependencyManager::get(Constants::ROUTER);
+
+        $env = DependencyManager::get(Constants::ENVIRONMENT);
+
+        $router->matchRoute();
+
+        $controller = $router->getController();
+        $this->controller = new $controller();
+        $this->method = $router->getMethod();
 
         if ($this->controller instanceof Controller && !empty($this->method)) {
             $this->controller->{$this->method}();

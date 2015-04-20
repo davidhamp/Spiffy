@@ -11,4 +11,8 @@ class Constants
 
     const MUSTACHE_ENGINE = 'SPF\\Mustache\\MustacheEngine';
 
+    const REQUEST = 'SPF\\HTTP\\Request';
+
+    const ROUTER = 'SPF\\Core\\Router';
+
 }

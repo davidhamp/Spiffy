@@ -21,8 +21,6 @@ class DependencyManager {
         }
 
         self::$objects[$name] = $object;
-
-        return $object;
     }
 
     static public function get($name)
@@ -38,7 +36,8 @@ class DependencyManager {
             return self::$objects[$name];
         }
 
-        return self::set($name, self::process($name));
+        self::set($name, self::process($name));
+        return self::get($name);
     }
 
     static protected function process($name)
@@ -60,7 +59,7 @@ class DependencyManager {
         if (class_exists($name)) {
             $reflectionClass = new reflectionClass($name);
             $constructor = $reflectionClass->getConstructor();
-            $comments = $constructor->getDocComment();
+            $comments = $constructor ? $constructor->getDocComment() : '';
 
             if (preg_match('/@dmManaged\n/', $comments)) {
                 if (preg_match('/@dmProvider\s+([\w\\\\]+)/s', $comments, $provider)) {
@@ -72,7 +71,7 @@ class DependencyManager {
                     }
                 }
 
-                if(preg_match_all('/@dmRequires\s+([\w\\\\]+)\s+(\$\w+)/s', $comments, $tags, PREG_SET_ORDER)) {
+                if(preg_match_all('/@dmRequires\s+([\w\\\\]+)\s+(@\w+)/s', $comments, $tags, PREG_SET_ORDER)) {
                     if (count($tags) < $constructor->getNumberOfRequiredParameters()) {
                         throw new DependencyResolutionException('You must declare all requried dependencies for this class');
                     }
@@ -91,6 +90,8 @@ class DependencyManager {
                     return $reflectionClass->newInstanceArgs($dependencies);
                 }
             }
+
+            return $reflectionClass->newInstance();
         }
 
         return false;
