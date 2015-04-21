@@ -13,6 +13,8 @@ class Constants
 
     const REQUEST = 'SPF\\HTTP\\Request';
 
+    const RESPONSE = 'SPF\\HTTP\\Response';
+
     const ROUTER = 'SPF\\Core\\Router';
 
 }

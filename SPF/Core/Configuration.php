@@ -10,6 +10,8 @@ class Configuration
 
     /**
      * @dmManaged
+     *
+     * @method __construct
      */
     public function __construct()
     {

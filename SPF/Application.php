@@ -10,10 +10,6 @@ use \Exception;
 
 class Application {
 
-    protected $controller;
-
-    protected $method;
-
     public function __construct()
     {
         DependencyManager::set('ExceptionHandler', new ExceptionHandler());
@@ -35,17 +31,27 @@ class Application {
 
         $env = DependencyManager::get(Constants::ENVIRONMENT);
 
-        $router->matchRoute();
+        if ($router->matchRoute()) {
+            $controller = $router->getController();
+            $method = $router->getMethod();
 
-        $controller = $router->getController();
-        $this->controller = new $controller();
-        $this->method = $router->getMethod();
+            if (!($controller instanceof Controller)) {
+                throw new ControllerException("The specified controller class isn't an instance of Controller");
+            }
 
-        if ($this->controller instanceof Controller && !empty($this->method)) {
-            $this->controller->{$this->method}();
-        } else {
-            throw new Exceptions\ControllerException("Either a controller or a method hasn't been set yet.");
+            if (empty($method)) {
+                throw new ControllerException("Method is not defined");
+            }
+
+            if (!method_exists($controller, $method)) {
+                throw new ControllerException("The defined method does not exist in the controller class");
+            }
+
+            $controller->{$method}();
         }
+
+        $response = DependencyManager::get(Constants::RESPONSE);
+        $response->send();
     }
 
     public function setController(Controller $controller)

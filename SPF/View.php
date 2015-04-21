@@ -3,6 +3,8 @@
 namespace SPF;
 
 use Mustache;
+use SPF\Dependency\DependencyManager;
+use SPF\Dependency\Constants;
 
 class View {
 
@@ -15,7 +17,7 @@ class View {
 
     public function render($data)
     {
-        DependencyManager::get(Constants::MUSTACHE_ENGINE)->render($this->template, $data);
+        return DependencyManager::get(Constants::MUSTACHE_ENGINE)->render($this->template, $data);
     }
 
 }

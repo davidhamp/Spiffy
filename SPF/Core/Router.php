@@ -3,6 +3,7 @@
 namespace SPF\Core;
 
 use SPF\HTTP\Request;
+use SPF\Dependency\DependencyManager;
 
 class Router
 {
@@ -15,8 +16,15 @@ class Router
     protected $routeParams;
 
     /**
+     * Constructor
+     *
+     * @method __construct
+     *
      * @dmManaged
      * @dmProvider SPF\Dependency\Providers\Core\RouterProvider
+     *
+     * @param array   $routes  Compiled yaml routes file
+     * @param Request $request Request object instnace
      */
     public function __construct($routes, Request $request)
     {
@@ -26,26 +34,30 @@ class Router
 
     public function matchRoute()
     {
-        //iterate over all routes and find a match based on the request
         foreach ($this->routes as $pattern => $route) {
             if ($pattern === $this->request->uri) {
-                $this->currentRoute = $route;
+                if ($this->routeIsValid($route)) {
+                    $this->currentRoute = $route;
+                    return true;
+                }
             }
         }
+
+        return false;
     }
 
     public function getController()
     {
-        return $this->currentRoute['controller'];
+        return ($this->currentRoute) ? DependencyManager::get($this->currentRoute['controller']) : null;
     }
 
     public function getMethod()
     {
-        return $this->currentRoute['method'];
+        return ($this->currentRoute['method']) ? $this->currentRoute['method'] : null;
     }
 
-    private function routeIsValid($routeInformation) {
-        return true;
+    private function routeIsValid($route) {
+        return is_array($route) && array_key_exists('controller', $route) && array_key_exists('method', $route);
     }
 
 }

@@ -2,13 +2,25 @@
 
 namespace SPF;
 
-class Controller {
+use SPF\Model;
+use SPF\View;
+use SPF\HTTP\Response;
+use SPF\Dependency\DependencyManager;
+use SPF\Dependency\Constants;
+
+abstract class Controller {
 
     protected $view;
 
     protected $model;
 
-    public function __construct()
+    /**
+     * Constructor
+     *
+     * @method __construct
+     * @dmManaged
+     */
+    public final function __construct()
     {}
 
     public function setView(View $view)
@@ -32,7 +44,7 @@ class Controller {
             throw new ControllerException("This controller isn't valid.  Either the view or model haven't been set correctly");
         }
 
-        $response = new Response();
+        $response = DependencyManager::get(Constants::RESPONSE);
 
         return $response->setBody(
             $this->view->render($this->model)
