@@ -21,46 +21,44 @@ class Application {
         if (!defined('__PROJECT_NAMESPACE__')) {
             throw new SetupException('Required global constant __PROJECT_NAMESPACE__ undefined');
         }
-
-        DependencyManager::set('Application', $this);
     }
 
     public function run()
     {
         $router = DependencyManager::get(Constants::ROUTER);
-
-        $env = DependencyManager::get(Constants::ENVIRONMENT);
+        $response = DependencyManager::get(Constants::RESPONSE);
 
         if ($router->matchRoute()) {
-            $controller = $router->getController();
-            $method = $router->getMethod();
+            $matchedRoute = $router->getMatchedRoute();
+
+            $controller = DependencyManager::get($matchedRoute['controller']);
+            $controller->setParams($matchedRoute['params']);
 
             if (!($controller instanceof Controller)) {
-                throw new ControllerException("The specified controller class isn't an instance of Controller");
+                throw new ControllerException(
+                    "The specified controller class doesn't exist or isn't a valid Controller class"
+                );
             }
 
-            if (empty($method)) {
-                throw new ControllerException("Method is not defined");
-            }
-
-            if (!method_exists($controller, $method)) {
+            if (!method_exists($controller, $matchedRoute['method'])) {
                 throw new ControllerException("The defined method does not exist in the controller class");
             }
 
-            $controller->{$method}();
-        }
+            $controller->{$matchedRoute['method']}();
+            $response->setBody($controller->getContent());
 
+            if (isset($matchedRoute['contentType'])) {
+                $response->setContentType($matchedRoute['contentType']);
+            }
+
+        } else {
+            $response->setStatusCode(404);
+        }
+    }
+
+    public function __destruct()
+    {
         $response = DependencyManager::get(Constants::RESPONSE);
         $response->send();
-    }
-
-    public function setController(Controller $controller)
-    {
-        $this->controller = $controller;
-    }
-
-    public function setMethod($method)
-    {
-        $this->method = $method;
     }
 }

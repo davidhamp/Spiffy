@@ -10,9 +10,18 @@ class View {
 
     public $template;
 
-    public function __construct($template)
+    public function __construct($template = '')
     {
         $this->template = $template;
+    }
+
+    public function setTemplate($template)
+    {
+        if (is_string($template)) {
+            $this->template = $template;
+        }
+
+        return $this;
     }
 
     public function render($data)

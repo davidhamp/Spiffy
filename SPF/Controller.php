@@ -4,9 +4,9 @@ namespace SPF;
 
 use SPF\Model;
 use SPF\View;
-use SPF\HTTP\Response;
 use SPF\Dependency\DependencyManager;
 use SPF\Dependency\Constants;
+use \Exception;
 
 abstract class Controller {
 
@@ -14,41 +14,80 @@ abstract class Controller {
 
     protected $model;
 
+    protected $params;
+
     /**
      * Constructor
      *
      * @method __construct
      * @dmManaged
      */
-    public final function __construct()
+    public function __construct($options = array())
     {}
 
-    public function setView(View $view)
+    public function setParams($params)
+    {
+        $this->params = $params;
+    }
+
+    public function getParam($name)
+    {
+        return array_key_exists($name, $this->params) ? $this->params[$name] : null;
+    }
+
+    public function getView()
+    {
+        return $this->view;
+    }
+
+    public function setView($view)
     {
         $this->view = $view;
+
+        return $this;
     }
 
-    public function setModel(Model $model)
+    public function getModel()
     {
-        $this->model = $model;
+        return $this->model;
     }
 
-    public function validate()
+    public function setModel($data)
     {
-        return $this->view instanceof View && $this->model instanceof Model;
+        $this->model = $data;
+
+        return $this;
     }
 
-    public function generateResponse()
+    /**
+     * Will return either a rendered view or just the model data
+     *
+     * If the view is set to a string, it will treat it as a template path and create a new View
+     *
+     * It will then attempt to call the view render on the view if it exists.
+     *
+     * If not, it will return the model data (which can be null)
+     *
+     * @method getContent
+     *
+     * @return mixed
+     */
+    public function getContent()
     {
-        if (!$this->validate()) {
-            throw new ControllerException("This controller isn't valid.  Either the view or model haven't been set correctly");
+        if (DependencyManager::get(Constants::RESPONSE)->isJson()) {
+            return $this->model;
         }
 
-        $response = DependencyManager::get(Constants::RESPONSE);
+        if (!is_null($this->view)) {
+            if (is_string($this->view)) {
+                $this->view = new View($this->view);
+            }
 
-        return $response->setBody(
-            $this->view->render($this->model)
-        );
+            if ($this->view instanceof View) {
+                return $this->view->render($this->model);
+            }
+        }
+
+        return $this->model;
     }
-
 }

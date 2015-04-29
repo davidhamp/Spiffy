@@ -13,8 +13,6 @@ class Router
 
     protected $routeOptions;
 
-    protected $routeParams;
-
     /**
      * Constructor
      *
@@ -35,29 +33,42 @@ class Router
     public function matchRoute()
     {
         foreach ($this->routes as $pattern => $route) {
-            if ($pattern === $this->request->uri) {
-                if ($this->routeIsValid($route)) {
-                    $this->currentRoute = $route;
-                    return true;
+
+            $pattern = str_replace('/', '\/', preg_replace('/:(\w+)/', '(?<$1>\w+)', $pattern));
+
+            preg_match('#^' . $pattern . '$#', $this->request->uri, $matches);
+
+            if ($matches && $this->routeIsValid($route)) {
+
+                foreach($matches as $key => $value) {
+                    if (is_numeric($key)) {
+                        unset($matches[$key]);
+                    }
                 }
+
+                $route['params'] = $matches;
+                $this->currentRoute = $route;
+
+                return true;
             }
         }
 
         return false;
     }
 
-    public function getController()
+    public function getMatchedRoute()
     {
-        return ($this->currentRoute) ? DependencyManager::get($this->currentRoute['controller']) : null;
+        return $this->currentRoute;
     }
 
-    public function getMethod()
+    protected function routeIsValid($route)
     {
-        return ($this->currentRoute['method']) ? $this->currentRoute['method'] : null;
-    }
-
-    private function routeIsValid($route) {
-        return is_array($route) && array_key_exists('controller', $route) && array_key_exists('method', $route);
+        return (is_array($route) && array_key_exists('controller', $route) && array_key_exists('method', $route))
+            && (
+                (isset($route['options']['requestMethod']))
+                    ? $route['requestMethod'] === $this->request->method
+                    : true
+                );
     }
 
 }

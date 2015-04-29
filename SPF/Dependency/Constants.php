@@ -17,4 +17,6 @@ class Constants
 
     const ROUTER = 'SPF\\Core\\Router';
 
+    const DATABASE = 'SPF\\Core\\Database';
+
 }

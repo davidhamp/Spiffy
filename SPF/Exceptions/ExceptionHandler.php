@@ -16,12 +16,20 @@ class ExceptionHandler
 
     public function handle(Exception $e)
     {
+        $response = DependencyManager::get(Constants::RESPONSE)->setStatusCode(500);
+
         if (DependencyManager::get(Constants::ENVIRONMENT)->getCurrentEnvironment() === Environment::DEVELOPMENT) {
-            echo 'Caught exception: ',  $e->getMessage(), "\n";
+            $message = 'Caught exception: \n' . $e->getMessage() .  "\n";
             exit();
         } else {
-            exit();
+            $message = 'Interal Server Error';
         }
+
+        if ($response->getResponseType() === 'json') {
+            $message = json_encode(array('message' => $message));
+        }
+
+        $response->setBody($message);
     }
 
 }
