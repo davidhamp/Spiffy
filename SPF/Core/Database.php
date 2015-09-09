@@ -14,11 +14,11 @@ class Database
      * Constructor
      *
      * @dmManaged
-     * @dmRequires SPF\Core\Configuration @config
+     * @dmRequires SPF\Core\Configuration $config
      *
      * @method __construct
      */
-    public function __construct($config)
+    public function __construct(Configuration $config)
     {
         $this->dbConfig = $config->get('databases');
     }

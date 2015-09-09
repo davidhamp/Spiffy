@@ -84,7 +84,7 @@ class Response {
         }
 
         if ($this->isJson()) {
-            $this->body = json_encode($this->body);
+            $this->body = json_encode($this->body, JSON_NUMERIC_CHECK);
         }
 
         echo $this->body;

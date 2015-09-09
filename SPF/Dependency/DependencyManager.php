@@ -170,7 +170,7 @@ class DependencyManager {
             $comments = $constructor ? $constructor->getDocComment() : '';
 
             if (preg_match('/@dmManaged\n/', $comments)) {
-                if (preg_match('/@dmProvider\s+([\w\\\\]+)/s', $comments, $provider)) {
+                if (preg_match('/@dmProvider\s+([\w\\\\]+)/', $comments, $provider)) {
                     if (class_exists($provider[1])) {
                         $provider = new $provider[1]();
                         return $provider->load();
@@ -179,9 +179,9 @@ class DependencyManager {
                     }
                 }
 
-                preg_match_all('/@dmRequires\s+([\w\\\\]+)\s+(@\w+)/s', $comments, $tags, PREG_SET_ORDER);
+                preg_match_all('/@dmRequires\s+([\w\\\\]+)\s+(\$[\w]+)/', $comments, $tags, PREG_SET_ORDER);
                 if (count($tags) < $constructor->getNumberOfRequiredParameters()) {
-                    throw new DependencyResolutionException('You must declare all requried dependencies for this class');
+                    throw new DependencyResolutionException('You must declare all required dependencies for this class');
                 }
 
                 $dependencies = array();

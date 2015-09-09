@@ -14,7 +14,7 @@ class Environment
 
     /**
      * @dmManaged
-     * @dmRequires SPF\Core\Configuration @config
+     * @dmRequires SPF\Core\Configuration $config
      */
     public function __construct(Configuration $config)
     {
