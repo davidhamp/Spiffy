@@ -13,8 +13,8 @@ class Database
     /**
      * Constructor
      *
-     * @dmManaged
-     * @dmRequires SPF\Core\Configuration $config
+     * @SPF\DmManaged
+     * @SPF\DmRequires SPF\Core\Configuration $config
      *
      * @method __construct
      */

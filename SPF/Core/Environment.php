@@ -13,8 +13,8 @@ class Environment
     protected $currentEnv = self::PRODUCTION;
 
     /**
-     * @dmManaged
-     * @dmRequires SPF\Core\Configuration $config
+     * @SPF\DmManaged
+     * @SPF\DmRequires SPF\Core\Configuration $config
      */
     public function __construct(Configuration $config)
     {

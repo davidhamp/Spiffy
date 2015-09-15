@@ -18,8 +18,8 @@ class Router
      *
      * @method __construct
      *
-     * @dmManaged
-     * @dmProvider SPF\Dependency\Providers\Core\RouterProvider
+     * @SPF\DmManaged
+     * @SPF\DmProvider SPF\Dependency\Providers\Core\RouterProvider
      *
      * @param array   $routes  Compiled yaml routes file
      * @param Request $request Request object instnace

@@ -9,7 +9,7 @@ class Configuration
     protected $config;
 
     /**
-     * @dmManaged
+     * @SPF\DmManaged
      *
      * @method __construct
      */

@@ -20,7 +20,7 @@ abstract class Controller {
      * Constructor
      *
      * @method __construct
-     * @dmManaged
+     * @SPF\DmManaged
      */
     public function __construct($options = array())
     {}

@@ -4,8 +4,9 @@ namespace SPF\Dependency;
 
 use SPF\Dependency\Providers\ProviderBase;
 use SPF\Exceptions\DependencyResolutionException;
+use SPF\Annotations\Engine as AnnotationEngine;
+use SPF\Core\ReflectionPool;
 use \Closure;
-use \reflectionClass;
 
 /**
  * DependencyManager
@@ -23,7 +24,7 @@ use \reflectionClass;
  * The get method will analyze the doc comments present in your class's constructor.
  *
  * If you wish to have the class's dependencies managed, or if this class is a dependency for another class,
- *     you need to add a @dmManaged tag.
+ *     you need to add a @SPF\DmManaged tag.
  *
  * There are two ways in which dependencies can be managed.
  *
@@ -32,11 +33,11 @@ use \reflectionClass;
  *     non-singleton class instances.  The return value of this load method should be a new instance of your class
  *     with all of it's required dependencies injected into your constructor.
  *
- * To use this first method you need to supply a @dmProvider <namespace\path\to\provider> tag.   This provider
+ * To use this first method you need to supply a @SPF\DmProvider <namespace\path\to\provider> tag.   This provider
  *     needs to have a load method that returns an instance of your class.
  *
  * The second method of dependency management is to define the class paths for all of the dependencies of your class's
- *     constructor.  Each requirement needs a @dmRequires <namespace\path\to\requirement> @<param name> tag.
+ *     constructor.  Each requirement needs a @SPF\DmRequires <namespace\path\to\requirement> $<param name> tag.
  *     If the number of requirements doesn't match the number of actual required parameters for the class, this will
  *     throw an exeption.
  *
@@ -165,42 +166,43 @@ class DependencyManager {
     static protected function getManaged($className)
     {
         if (class_exists($className)) {
-            $reflectionClass = new reflectionClass($className);
-            $constructor = $reflectionClass->getConstructor();
-            $comments = $constructor ? $constructor->getDocComment() : '';
 
-            if (preg_match('/@dmManaged\n/', $comments)) {
-                if (preg_match('/@dmProvider\s+([\w\\\\]+)/', $comments, $provider)) {
-                    if (class_exists($provider[1])) {
-                        $provider = new $provider[1]();
+            $annotations = AnnotationEngine::get($className);
+
+
+            if ($annotations->has('DmManaged')) {
+                if ($annotations->has('DmProvider')) {
+                    $provider = $annotations->get('DmProvider');
+                    if (class_exists($provider[0][0])) {
+                        $provider = new $provider[0][0]();
                         return $provider->load();
                     } else {
                         throw new DependencyResolutionException('The provider defined does not exist: ' . $provider[1]);
                     }
                 }
 
-                preg_match_all('/@dmRequires\s+([\w\\\\]+)\s+(\$[\w]+)/', $comments, $tags, PREG_SET_ORDER);
-                if (count($tags) < $constructor->getNumberOfRequiredParameters()) {
-                    throw new DependencyResolutionException('You must declare all required dependencies for this class');
+                if ($annotations->has('DmRequires')) {
+                    $reqs = $annotations->get('DmRequires');
+                    if (count($reqs) < $annotations->reflection->getNumberOfRequiredParameters()) {
+                        throw new DependencyResolutionException('You must declare all required dependencies for this class');
+                    }
                 }
 
                 $dependencies = array();
-                foreach ($constructor->getParameters() as $parameter) {
+                foreach ($annotations->reflection->getParameters() as $parameter) {
                     if (!$parameter->isOptional()) {
-                        foreach ($tags as $tag) {
-                            if (substr($tag[2], 1) === $parameter->name) {
-                                array_push($dependencies, self::get($tag[1]));
+                        foreach ($reqs as $req) {
+                            if (substr($req[1], 1) === $parameter->name) {
+                                array_push($dependencies, self::get($req[0]));
                             }
                         }
                     }
                 }
 
-                return $reflectionClass->newInstanceArgs($dependencies);
+                return ReflectionPool::get($className)->newInstanceArgs($dependencies);
             }
 
-            if (!$constructor) {
-                return $reflectionClass->newInstance();
-            }
+            return ReflectionPool::get($className)->newInstance();
         }
 
         return null;

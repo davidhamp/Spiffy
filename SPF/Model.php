@@ -2,14 +2,13 @@
 
 namespace SPF;
 
+use SPF\Annotations\Engine as AnnotationEngine;
 use \JsonSerializable;
 use \IteratorAggregate;
 use \ArrayIterator;
 use \Traversable;
 
-class Model implements JsonSerializable, IteratorAggregate  {
-
-    protected $strict = true;
+class Model implements JsonSerializable {
 
     public function __construct($data = array())
     {
@@ -20,18 +19,15 @@ class Model implements JsonSerializable, IteratorAggregate  {
     {
         if (is_array($data) || $data instanceof Traversable) {
             foreach ($data as $key => $value) {
-                if ($this->strict) {
-                    $method = 'set' . ucfirst($key);
-                    if (method_exists($this, $method)) {
-                        $this->{$method}($value);
-                        continue;
-                    }
+                $method = 'set' . ucfirst($key);
+                if (method_exists($this, $method)) {
+                    $this->{$method}($value);
+                    continue;
+                }
 
-                    if (property_exists($this, $key)) {
-                        $this->{$key} = $value;
-                    }
-                } else {
+                if (property_exists($this, $key)) {
                     $this->{$key} = $value;
+                    continue;
                 }
             }
         }
@@ -44,11 +40,16 @@ class Model implements JsonSerializable, IteratorAggregate  {
 
     public function jsonSerialize()
     {
-        return $this->getIterator();
-    }
+        $out = array();
+        foreach ($this as $key => $value) {
+            $annotation = AnnotationEngine::get($this, 'property', $key);
+            if ($annotation->has('JsonIgnore')) {
+                continue;
+            }
 
-    public function getIterator() {
-        return new ArrayIterator($this);
-    }
+            $out[$key] = $value;
+        }
 
+        return $out;
+    }
 }
