@@ -20,7 +20,6 @@ class ExceptionHandler
 
         if (DependencyManager::get(Constants::ENVIRONMENT)->getCurrentEnvironment() === Environment::DEVELOPMENT) {
             $message = 'Caught exception: \n' . $e->getMessage() .  "\n";
-            exit();
         } else {
             $message = 'Interal Server Error';
         }

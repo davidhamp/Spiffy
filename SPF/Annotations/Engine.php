@@ -67,12 +67,12 @@ class Engine {
                 }
             } catch (\ReflectionException  $e) {
                 return new AnnotationSet();
-                // throw new AnnotationEngineException("Attempting to inspect non-existent object member: " . $type . " - " . $element);
             }
 
             $docblock = $reflectionElement ? $reflectionElement->getDocComment() : '';
 
-            preg_match_all('/@' . self::$annotationTagspace .'\\\\(.+)$/m', $docblock, $annotations, PREG_PATTERN_ORDER);
+            preg_match_all('/@' . self::$annotationTagspace .':(.+)$/m', $docblock, $annotations, PREG_PATTERN_ORDER);
+
             if (count($annotations) > 1) {
                 self::$annotationCache[$cacheKey] = $annotations[1] ? new AnnotationSet($annotations[1], $reflectionElement) : new AnnotationSet();
             }

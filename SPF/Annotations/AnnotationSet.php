@@ -3,7 +3,7 @@
 namespace SPF\Annotations;
 
 /**
- * @todo Update to user Iterator for traversing over annotations
+ * @todo Update to use Iterator for traversing over annotations
  */
 class AnnotationSet {
 

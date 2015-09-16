@@ -14,15 +14,8 @@ class Router
     protected $routeOptions;
 
     /**
-     * Constructor
-     *
-     * @method __construct
-     *
-     * @SPF\DmManaged
-     * @SPF\DmProvider SPF\Dependency\Providers\Core\RouterProvider
-     *
-     * @param array   $routes  Compiled yaml routes file
-     * @param Request $request Request object instnace
+     * @SPF:DmManaged
+     * @SPF:DmProvider SPF\Dependency\Providers\Core\RouterProvider
      */
     public function __construct($routes, Request $request)
     {

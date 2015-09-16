@@ -24,7 +24,7 @@ use \Closure;
  * The get method will analyze the doc comments present in your class's constructor.
  *
  * If you wish to have the class's dependencies managed, or if this class is a dependency for another class,
- *     you need to add a @SPF\DmManaged tag.
+ *     you need to add a @SPF:DmManaged tag.
  *
  * There are two ways in which dependencies can be managed.
  *
@@ -33,11 +33,11 @@ use \Closure;
  *     non-singleton class instances.  The return value of this load method should be a new instance of your class
  *     with all of it's required dependencies injected into your constructor.
  *
- * To use this first method you need to supply a @SPF\DmProvider <namespace\path\to\provider> tag.   This provider
+ * To use this first method you need to supply a @SPF:DmProvider <namespace\path\to\provider> tag.   This provider
  *     needs to have a load method that returns an instance of your class.
  *
  * The second method of dependency management is to define the class paths for all of the dependencies of your class's
- *     constructor.  Each requirement needs a @SPF\DmRequires <namespace\path\to\requirement> $<param name> tag.
+ *     constructor.  Each requirement needs a @SPF:DmRequires <namespace\path\to\requirement> $<param name> tag.
  *     If the number of requirements doesn't match the number of actual required parameters for the class, this will
  *     throw an exeption.
  *
@@ -80,7 +80,6 @@ class DependencyManager {
     {
         if (array_key_exists($name, self::$objects) && !is_null(self::$objects[$name])) {
             throw new DependencyResolutionException("Attempting to set an object with a key that already exists");
-            exit();
         }
 
         self::$objects[$name] = $object;
@@ -168,7 +167,6 @@ class DependencyManager {
         if (class_exists($className)) {
 
             $annotations = AnnotationEngine::get($className);
-
 
             if ($annotations->has('DmManaged')) {
                 if ($annotations->has('DmProvider')) {

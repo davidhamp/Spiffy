@@ -11,10 +11,7 @@ class Response {
     protected $headers = array('Content-Type' => 'text/html');
 
     /**
-     * Constructor
-     *
-     * @method __construct
-     * @SPF\DmManaged
+     * @SPF:DmManaged
      */
     public function __construct()
     {}

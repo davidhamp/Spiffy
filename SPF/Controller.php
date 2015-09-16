@@ -17,10 +17,7 @@ abstract class Controller {
     protected $params;
 
     /**
-     * Constructor
-     *
-     * @method __construct
-     * @SPF\DmManaged
+     * @SPF:DmManaged
      */
     public function __construct($options = array())
     {}
