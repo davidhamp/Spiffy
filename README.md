@@ -144,37 +144,33 @@ SPF\Annotations\AnnotationSet->get('AnnotationName') will return an array of all
 
 Each annotation in the array is an array of 0 or more elements corresponding to each of the Annotation paramters.
 
-This example shows how the Dependency Manager uses Annotations:
+Example:
 ```php
 /**
- * @SPF:DmManaged
- * @SPF:DmRequires NameSpace\Dependency\One $dependency1
- * @SPF:DmRequires NameSpace\Dependency\Two $dependency2
+ * @SPF:AnnotationExample Param1a Param2a
+ * @SPF:AnnotationExample Param1b Param2b
  */
-public function __construct($dependency1, $dependency2)
-{
-    $this->dep1 = $dependency1;
-    $this->dep2 = $dependency2;
-}
+public function __construct()
+{}
 ```
 
 ```php
-$annotations = SPF\Annotations\Engine->get($class, 'constructor');
-$requires = $annotations->get('DmRequires');
+$annotationSet = SPF\Annotations\Engine->get($class, 'constructor');
+$annotations = $annotations->get('AnnotationExample');
 
-print_r($requires);
+print_r($annotations);
 ```
 
 would result in:
 ```
 Array (
     [0] => Array (
-        [0] => NameSpace\Dependency\One
-        [1] => $dependency1
+        [0] => Param1a
+        [1] => Param2a
     )
     [1] => Array (
-        [0] => NameSpace\Dependency\Two
-        [1] => $dependency2
+        [0] => Param1b
+        [1] => Param2b
     )
 )
 ```
