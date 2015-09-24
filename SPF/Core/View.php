@@ -19,7 +19,8 @@ use SPF\Dependency\Registry;
  * When {@link SPF\Core\View::render()} is called, it will take the accepted data and render it through the
  *     MustacheEngine required by SPF.
  */
-class View {
+class View
+{
 
     public $template;
 

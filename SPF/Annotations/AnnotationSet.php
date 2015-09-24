@@ -12,13 +12,15 @@ namespace SPF\Annotations;
 /**
  * @todo Update to use Iterator for traversing over annotations
  */
-class AnnotationSet {
+class AnnotationSet
+{
 
     protected $annotations = array();
 
     public $reflection;
 
-    public function __construct($annotations = array(), $reflection = null) {
+    public function __construct($annotations = array(), $reflection = null)
+    {
         $this->reflection = $reflection;
 
         foreach ($annotations as $annotation) {
@@ -33,11 +35,13 @@ class AnnotationSet {
         }
     }
 
-    public function has($annotation) {
+    public function has($annotation)
+    {
         return array_key_exists($annotation, $this->annotations);
     }
 
-    public function get($annotation = null) {
+    public function get($annotation = null)
+    {
         if (is_null($annotation)) {
             return $this->annotations;
         }

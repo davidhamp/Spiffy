@@ -17,7 +17,8 @@ use \reflectionClass;
 /**
  * Static because this gets used by the Dependency Manager
  */
-class Engine {
+class Engine
+{
 
     // This class should not only be responsible for creating the reflection class instances, but it should also cache
     // results of parsed annotations so that multiples of the same object don't have to be re-parsed.

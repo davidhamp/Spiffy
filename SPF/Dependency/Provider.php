@@ -23,5 +23,6 @@ abstract class Provider
      *
      * @return Mixed[] Provided class instance.
      */
-    public function load() {}
+    public function load()
+    {}
 }

@@ -17,10 +17,12 @@ use SPF\Exceptions\ControllerException;
 use SPF\Core\Controller;
 
 /**
- * SPF Application
+ * SPF Main Application
  *
  * Main Application class.  This should be instantiated in your project bootstrap file, and is kicked off by calling
  *     the {@link SPF\Application::run()} method.
+ *
+ * @uses SPF\Dependency\DependencyManager
  */
 class Application
 {
@@ -28,7 +30,7 @@ class Application
      * Application Constructor
      *
      * When Application is created, it sets up the {@link SPF\Exceptions\Handler} and checks for required application
-     *     constants '__BASE__' and '__PROJECT_NAMESPACE__'
+     *     constants __BASE__ and __PROJECT_NAMESPACE__
      *
      * @param  string $environment Used to make output decisions in code depending on your intended environement.  This
      *                            gets set to the {@link SPF\Dependency\DependencyManager} under 'Environment'
@@ -104,7 +106,7 @@ class Application
     }
 
     /**
-     * Destruct
+     * Sends the response during script clean up.
      *
      * The {@link SPF\HTTP\Response} is sent during the destruct of the Application class.
      *

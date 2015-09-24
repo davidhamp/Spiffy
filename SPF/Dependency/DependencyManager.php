@@ -58,7 +58,8 @@ use \Closure;
  *
  * @uses SPF\Annotations\Engine
  */
-class DependencyManager {
+class DependencyManager
+{
 
     /**
      * Object storage

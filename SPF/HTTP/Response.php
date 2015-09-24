@@ -16,12 +16,29 @@ namespace SPF\HTTP;
  *     to script completion in ordr to affect the proper response.  The {@link SPF\HTTP\Response::send()} method will
  *     fire off all headers, before echoing out the body contents.  This happens on {SPF\Application::__destruct()}
  */
-class Response {
+class Response
+{
 
+    /**
+     * HTTP Status code to send with the response
+     *
+     * @var int
+     */
     protected $statusCode = 200;
 
+    /**
+     * Response body which will be JSON encoded if Content-Type header is set to 'application/json'
+     *
+     * @var string|JsonSerializable
+     */
     protected $body;
 
+    /**
+     * Collection of HTTP headers which will be sent with the response.  Defaults to contain a 'Content-Type' header
+     *     set to 'text/html'
+     *
+     * @var array
+     */
     protected $headers = array('Content-Type' => 'text/html');
 
     /**

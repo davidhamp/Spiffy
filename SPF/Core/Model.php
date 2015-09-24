@@ -26,7 +26,8 @@ use \Traversable;
  * @uses SPF\Annotations\Engine
  * @uses JsonSerializable
  */
-class Model implements JsonSerializable {
+class Model implements JsonSerializable
+{
 
     /**
      * Constructor.
