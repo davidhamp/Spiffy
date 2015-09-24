@@ -1,11 +1,11 @@
 <?php
 
-namespace SPF;
+namespace SPF\Core;
 
-use SPF\Model;
-use SPF\View;
+use SPF\Core\Model;
+use SPF\Core\View;
 use SPF\Dependency\DependencyManager;
-use SPF\Dependency\Constants;
+use SPF\Dependency\Registry;
 use \Exception;
 
 abstract class Controller {
@@ -71,7 +71,7 @@ abstract class Controller {
      */
     public function getContent()
     {
-        if (DependencyManager::get(Constants::RESPONSE)->isJson()) {
+        if (DependencyManager::get(Registry::RESPONSE)->isJson()) {
             return $this->model;
         }
 

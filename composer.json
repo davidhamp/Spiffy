@@ -16,6 +16,9 @@
         "mustache/mustache": "2.*",
         "symfony/yaml": "2.*"
     },
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "2.*"
+    },
     "autoload": {
         "psr-4": {"SPF\\": "SPF/"}
     }

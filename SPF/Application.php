@@ -3,16 +3,21 @@
 namespace SPF;
 
 use SPF\Dependency\DependencyManager;
-use SPF\Dependency\Constants;
-use SPF\Exceptions\ExceptionHandler;
+use SPF\Dependency\Registry;
+use SPF\Exceptions\Handler;
+use SPF\Exceptions\SetupException;
 use SPF\Exceptions\ControllerException;
+use SPF\Core\Controller;
 use \Exception;
 
 class Application {
 
-    public function __construct()
+    public function __construct($environment = 'production')
     {
-        DependencyManager::set('ExceptionHandler', new ExceptionHandler());
+        $exceptionHandler = new Handler($environment);
+        DependencyManager::set('ExceptionHandler', $exceptionHandler);
+
+        DependencyManager::set('Environment', $environment);
 
         if (!defined('__BASE__')) {
             throw new SetupException('Required global constant __BASE__ undefined');
@@ -25,8 +30,8 @@ class Application {
 
     public function run()
     {
-        $router = DependencyManager::get(Constants::ROUTER);
-        $response = DependencyManager::get(Constants::RESPONSE);
+        $router = DependencyManager::get(Registry::ROUTER);
+        $response = DependencyManager::get(Registry::RESPONSE);
 
         if ($router->matchRoute()) {
             $matchedRoute = $router->getMatchedRoute();
@@ -36,7 +41,7 @@ class Application {
 
             if (!($controller instanceof Controller)) {
                 throw new ControllerException(
-                    "The specified controller class doesn't exist or isn't a valid Controller class"
+                    "The specified controller class " . $matchedRoute['controller'] . " doesn't exist or isn't a valid Controller class"
                 );
             }
 
@@ -58,7 +63,7 @@ class Application {
 
     public function __destruct()
     {
-        $response = DependencyManager::get(Constants::RESPONSE);
+        $response = DependencyManager::get(Registry::RESPONSE);
         $response->send();
     }
 }

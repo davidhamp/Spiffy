@@ -90,18 +90,18 @@ A routes file should be formatted like this:
     description: 'Humans require descriptions'
 ```
 
-## SPF\Model
-Models are objects that will house your renderable data in the SPF\View.  If the route is supposed to return JSON, or if no View is set, then the model will be run through json_encode.  Models use the JsonSerializable interface in order to leverage the Annotation Engine (more on that later) in order to be able to selectively ignore properties in the Model when it's serialized.
+## SPF\Core\Model
+Models are objects that will house your renderable data in the SPF\Core\View.  If the route is supposed to return JSON, or if no View is set, then the model will be run through json_encode.  Models use the JsonSerializable interface in order to leverage the Annotation Engine (more on that later) in order to be able to selectively ignore properties in the Model when it's serialized.
 
-## SPF\Views
-SPF\Views contain template information and provide the rendering interface to the template parsing engine (in this case, Mustache).  When content is fetched from the controller, the defined Model is passed to the View's render method which is then parsed through the defined template through Mustache.  When assigning the View to the Controller, either a SPF\View instance or a template path can be used.  The Controller will create a new View object as needed prior to calling render.
+## SPF\Core\Views
+SPF\Core\Views contain template information and provide the rendering interface to the template parsing engine (in this case, Mustache).  When content is fetched from the controller, the defined Model is passed to the View's render method which is then parsed through the defined template through Mustache.  When assigning the View to the Controller, either a SPF\Core\View instance or a template path can be used.  The Controller will create a new View object as needed prior to calling render.
 
 If no view is defined, the Model will be JSON encoded.
 
-## SPF\Controller
-Controllers you write to handle your routes will have to extend SPF\Controller.  Each method in your controller should correspond to a single route defined in your routes.yaml file.
+## SPF\Core\Controller
+Controllers you write to handle your routes will have to extend SPF\Core\Controller.  Each method in your controller should correspond to a single route defined in your routes.yaml file.
 
-When this method is run, you should at the very least set model data for rendering.  You will likely want to define a template file or create an instance SPF\View as well to handle HTML output.
+When this method is run, you should at the very least set model data for rendering.  You will likely want to define a template file or create an instance SPF\Core\View as well to handle HTML output.
 
 # Reflection Pool
 The Reflection Pool is used by both the Annotation Engine and the Depenednecy Manager to cache PHP Reflection Objects used to inspect annotations.  The Dependency Manager uses these reflections to create new instances of classes and is useful when your classes have one or more dependencies on other classes.
@@ -220,3 +220,5 @@ public function __construct($dependency1, $dependency2)
 ```
 
 Each SPF:DmRequires should correspond to a required parameter of your class.  If you use DmRequires but do not provide all of your required class parameters, DM will throw an exception.
+
+Lastly, if you have a simple class that does not require a constructor

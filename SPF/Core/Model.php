@@ -1,6 +1,6 @@
 <?php
 
-namespace SPF;
+namespace SPF\Core;
 
 use SPF\Annotations\Engine as AnnotationEngine;
 use \JsonSerializable;

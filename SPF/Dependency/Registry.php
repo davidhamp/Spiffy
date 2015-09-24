@@ -2,7 +2,7 @@
 
 namespace SPF\Dependency;
 
-class Constants
+class Registry
 {
 
     const CONFIGURATION = 'SPF\\Core\\Configuration';
