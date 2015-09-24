@@ -29,7 +29,7 @@ class Request {
     /**
      * Gathers up key $_SERVER info as well as stores $_GET, $_POST, $_COOKIE, and PUT data (through php://input).
      *
-     * SPF:DmManaged
+     * @SPF:DmManaged
      */
     public function __construct()
     {

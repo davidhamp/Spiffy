@@ -21,7 +21,7 @@ use \Traversable;
  *     in the contstructor or through the {@link SPF\Core\Model::loadData()} method.
  *     It utilizes the JsonSerializable interface as well as the {@link SPF\Annotations\Engine} class in order to
  *     control JSON serialized output.
- *     You may use the SPF:JsonIgnore Annoation on model properties in order to hide them from JSON Serialization.
+ *     You may use the @SPF:JsonIgnore Annoation on model properties in order to hide them from JSON Serialization.
  *
  * @uses SPF\Annotations\Engine
  * @uses JsonSerializable

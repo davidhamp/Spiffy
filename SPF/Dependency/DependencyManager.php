@@ -44,7 +44,7 @@ use \Closure;
  *     {@link SPF\Dependency\DependencyManager::addProviderLocation()} method.  New ProviderLocations are searched first
  *     so you can override SPF level class Providers with Providers in your project.
  *
- * Alternatively you can define your provider using the SPF:DmProvider <namespace\path\to\provider> Annotation.
+ * Alternatively you can define your provider using the @SPF:DmProvider <namespace\path\to\provider> Annotation.
  *
  * The second method of dependency management is to define the class paths for all of the dependencies of your class's
  *     constructor.  Each requirement needs a @SPF:DmRequires <namespace\path\to\requirement> $<paramName> tag.
@@ -181,11 +181,11 @@ class DependencyManager {
      * Attempts to fetch an instance of a managed class while resolving all of it's dependencies.
      *
      * If the $className is found by the autoloader, this will then utilize {@link SPF\Annotations\Engine} to inspect
-     *     the class' constructor for an SPF:DmManaged annotation.  If one exists, it will then look for
-     *     an SPF:DmProvider annotation.  This allows users to manually define a Provider outside of the regular
+     *     the class' constructor for an @SPF:DmManaged annotation.  If one exists, it will then look for
+     *     an @SPF:DmProvider annotation.  This allows users to manually define a Provider outside of the regular
      *     Provider search path.  If a provider is specified in this way, bu the provider doesn't exist, this will throw
-     *     an exception.  If no SPF:DmProvider tag is present, it will then inspect the required arguments for the
-     *     constructor and compare those with the SPF:DmRequires annotations.  The SPF:DmRequires annotations take
+     *     an exception.  If no @SPF:DmProvider tag is present, it will then inspect the required arguments for the
+     *     constructor and compare those with the @SPF:DmRequires annotations.  The @SPF:DmRequires annotations take
      *     two parameters.  The first is the fully qualified classname of the dependency, and the second is the
      *     parameter name in the contructor (including the dollar sign).  If not all of the required class parameters
      *     have a corresponding DmRequires annotation this will throw an exception.
