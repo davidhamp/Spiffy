@@ -1,7 +1,19 @@
 <?php
+/**
+ * SPF/HTTP/Request.php
+ *
+ * @author  David Hamp <david.hamp@gmail.com>
+ * @license https://github.com/davidhamp/Spiffy/blob/master/LICENSE.md
+ * @version 1.0.0
+ */
 
 namespace SPF\HTTP;
 
+/**
+ * Request abstraction class
+ *
+ * Centralizes various PHP request information such as $_SERVER, $_GET, $_POST, and $_COOKIE super globals.
+ */
 class Request {
 
     public $uri = '';
@@ -15,6 +27,8 @@ class Request {
     public $put = '';
 
     /**
+     * Gathers up key $_SERVER info as well as stores $_GET, $_POST, $_COOKIE, and PUT data (through php://input).
+     *
      * SPF:DmManaged
      */
     public function __construct()

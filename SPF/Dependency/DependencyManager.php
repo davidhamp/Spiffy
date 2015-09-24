@@ -1,8 +1,15 @@
 <?php
+/**
+ * SPF/Dependency/DependencyManager.php
+ *
+ * @author  David Hamp <david.hamp@gmail.com>
+ * @license https://github.com/davidhamp/Spiffy/blob/master/LICENSE.md
+ * @version 1.0.0
+ */
 
 namespace SPF\Dependency;
 
-use SPF\Dependency\Providers\ProviderBase;
+use SPF\Dependency\Providers\Provider;
 use SPF\Exceptions\DependencyResolutionException;
 use SPF\Annotations\Engine as AnnotationEngine;
 use SPF\Core\ReflectionPool;
@@ -13,44 +20,43 @@ use \Closure;
  *
  * This class was designed static so that it could be ubiquitous throughout the framework.
  *
- * It stores objects by a given keyname and retrieves the objects when using the get method.
+ * It stores objects by a given keyname and retrieves the objects when using the
+ *     {@link SPF\Dependency\DependencyManager::get()} method.
  *
  * When using fully qualified class names as keys, this class will attempt to find the corresponding class, resolve it's
  *     dependencies, and store a singleton instance of the class for later retrieval.  All dependencies resolved this
  *     way are also stored as singelton instances in the object storage container.
  *
- * Use of the set method directly should be limited, as it muddies the intent of this class.
- *
- * The get method will analyze the doc comments present in your class's constructor.
- *
- * If you wish to have the class's dependencies managed, or if this class is a dependency for another class,
+ * If you wish to have the class's dependencies managed, or if your class is a dependency for another class,
  *     you need to add a @SPF:DmManaged tag.
  *
  * There are two ways in which dependencies can be managed.
  *
- * The first method is to define a Provider for the class.  The provider is a wrapper for your class and has only a load
- *     method.  You can use this to manually resolve dependencies for your class, such as parsed yaml configs, or
+ * The first method is to define a Provider for the class.  The provider must extend
+ *     {@link SPF\Dependency\Providers\Provider} which only has a
+ *     {@link SPF\Dependency\Providers\Provider::load()} method.
+ *     You can use this to manually resolve dependencies for your class, such as parsed yaml configs, or
  *     non-singleton class instances.  The return value of this load method should be a new instance of your class
- *     with all of it's required dependencies injected into your constructor.
+ *     with all of it's required dependencies injected into it's constructor.
  *
- * To use this first method you need to supply a @SPF:DmProvider <namespace\path\to\provider> tag.   This provider
- *     needs to have a load method that returns an instance of your class.
+ * To use this mthod, you'll need to have a Provider with the same name as your class appended with 'Provider'.  This
+ *     Provider should be in your project's ProviderLocation path, which you can define in your bootstrap using the
+ *     {@link SPF\Dependency\DependencyManager::addProviderLocation()} method.  New ProviderLocations are searched first
+ *     so you can override SPF level class Providers with Providers in your project.
+ *
+ * Alternatively you can define your provider using the SPF:DmProvider <namespace\path\to\provider> Annotation.
  *
  * The second method of dependency management is to define the class paths for all of the dependencies of your class's
- *     constructor.  Each requirement needs a @SPF:DmRequires <namespace\path\to\requirement> $<param name> tag.
+ *     constructor.  Each requirement needs a @SPF:DmRequires <namespace\path\to\requirement> $<paramName> tag.
  *     If the number of requirements doesn't match the number of actual required parameters for the class, this will
  *     throw an exeption.
  *
- * Lastly, you can define providers for your class and put them in predictable locations.  The default location within
- *     the framwork is in SPF\Dependency\Providers, but you can define a new location for your project's providers using
- *     the addProviderLocation method.  When managed tags aren't found in the class, or even if the class itself isn't
- *     found, the DM will then look for a matching class in the defined provider's directories.  If one is found, it
- *     is instantiated, and the load method is again called.
- *
- * This means that you can create providers for third party classes that you do not wish to alter.
- *
  * In all instances, the instance of the object created through any of these means is stored in the object storage for
  *     later retrieval.  Therefore, you should only use the DM for singelton use cases for now.
+ *
+ * @see SPF\Dependency\Providers\Provider
+ *
+ * @uses SPF\Annotations\Engine
  */
 class DependencyManager {
 
@@ -66,15 +72,22 @@ class DependencyManager {
      *
      * @var array
      */
-    static protected $providerLocations = array('SPF' => 'SPF\\Dependency\\Providers');
+    static protected $providerLocations = array(
+        array('SPF', 'SPF\\Dependency\\Providers')
+    );
 
     /**
-     * Sets an object into the object storage
+     * Sets an item into the object storage
      *
-     * @method set
+     * While this method is public, it's mainly used to store singleton instances of classes into the $object pool.
+     *     However it can be handy to store arbitrary data into the DM for carrying data between scopes.
      *
-     * @param  string $name   Keyname to under which to store the object.
-     * @param  mixed $object Object to store.
+     * @param string $name   Keyname to under which to store the object.
+     * @param mixed  $object Object to store.
+     *
+     * @throws SPF\Exceptions\DependencyResolutionException
+     *
+     * @return void
      */
     static public function set($name, $object)
     {
@@ -93,11 +106,9 @@ class DependencyManager {
      *
      * If nothing is currently stored, this will then attempt to find a valid object using the process method.
      *
-     * @method get
+     * @param string $name This is the keyname to search for.  This is usually a fully qualified class name.
      *
-     * @param  string $name This is the keyname to search for.  This is usually a fully qualified class name.
-     *
-     * @return mixed
+     * @return mixed This will return whatever is stored in the object storage container under the requested $name
      */
     static public function get($name)
     {
@@ -119,34 +130,47 @@ class DependencyManager {
     /**
      * Adds a new provider location for provider lookup fallbacks.
      *
-     * @method addProviderLocation
+     * With this method you can define project-level provider locations which will be included when searching for
+     *     providers for any requested objects.
      *
      * @param string $namespace Namespace search string
      * @param string $location  Namespace replacement string provider location.
+     *
+     * @return void
      */
     static public function addProviderLocation($namespace, $location)
     {
         if (is_string($location)) {
-            array_push(self::$providerLocations, $location);
+            array_unshift(
+                self::$providerLocations,
+                array($namespace, $location)
+            );
         }
     }
 
     /**
      * Processes the class and attempt to resolve all dependencies or call an associated provider
      *
-     * @method process
+     * This will prioritize Providers in the defined providerLocations first.
+     *
+     * @internal
      *
      * @param string $className Fully qualified class name to resolve.
      *
-     * @return Object This will throw a DependencyResolutionException if nothing valid is found.
+     * @see SPF\Dependency\DependencyManager::getProvider()
+     * @see SPF\Dependency\DependencyManager::getManaged()
+     *
+     * @throws SPF\Exceptions\DependencyResolutionException
+     *
+     * @return Object
      */
     static protected function process($className)
     {
-        if ($object = self::getManaged($className)) {
+        if ($object = self::getProvider($className)) {
             return $object;
         }
 
-        if ($object = self::getProvider($className)) {
+        if ($object = self::getManaged($className)) {
             return $object;
         }
 
@@ -156,11 +180,21 @@ class DependencyManager {
     /**
      * Attempts to fetch an instance of a managed class while resolving all of it's dependencies.
      *
-     * @method getManaged
+     * If the $className is found by the autoloader, this will then utilize {@link SPF\Annotations\Engine} to inspect
+     *     the class' constructor for an SPF:DmManaged annotation.  If one exists, it will then look for
+     *     an SPF:DmProvider annotation.  This allows users to manually define a Provider outside of the regular
+     *     Provider search path.  If a provider is specified in this way, bu the provider doesn't exist, this will throw
+     *     an exception.  If no SPF:DmProvider tag is present, it will then inspect the required arguments for the
+     *     constructor and compare those with the SPF:DmRequires annotations.  The SPF:DmRequires annotations take
+     *     two parameters.  The first is the fully qualified classname of the dependency, and the second is the
+     *     parameter name in the contructor (including the dollar sign).  If not all of the required class parameters
+     *     have a corresponding DmRequires annotation this will throw an exception.
      *
-     * @param string $className Class to resolve
+     * @param string $className Fully qualified classname to resolve.
      *
-     * @return Object Returns an instance of the managed class if found.  Otherwise returns null.
+     * @throws SPF\Exceptions\DependencyResolutionException
+     *
+     * @return Object|null Returns an instance of the managed class if found.  Otherwise returns null.
      */
     static protected function getManaged($className)
     {
@@ -210,16 +244,16 @@ class DependencyManager {
      * Searches for a matching provider based on the providerLocations defined in this class.  If one is found
      *     this will instantiate it, and return the output of the provider's load method.
      *
-     * @method getProvider
-     *
      * @param string $className Class to resolve.
+     *
+     * @see SPF\Dependency\Provider
      *
      * @return mixed Returns the return value of a matched provider's load method.  Otherwise returns null.
      */
     static protected function getProvider($className)
     {
-        foreach (self::$providerLocations as $namespace => $providerLocation) {
-            $className = preg_replace('/^' . $namespace . '/', $providerLocation, $className) . 'Provider';
+        foreach (self::$providerLocations as $providerLocation) {
+            $className = preg_replace('/^' . $providerLocation[0] . '/', $providerLocation[1], $className) . 'Provider';
             if (class_exists($className)) {
                 $class = new $className();
                 return $class->load();

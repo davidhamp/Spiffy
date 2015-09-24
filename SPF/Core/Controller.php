@@ -1,14 +1,20 @@
 <?php
+/**
+ * SPF/Core/Controller.php
+ *
+ * @author  David Hamp <david.hamp@gmail.com>
+ * @license https://github.com/davidhamp/Spiffy/blob/master/LICENSE.md
+ * @version 1.0.0
+ */
 
 namespace SPF\Core;
 
-use SPF\Core\Model;
 use SPF\Core\View;
 use SPF\Dependency\DependencyManager;
 use SPF\Dependency\Registry;
-use \Exception;
 
-abstract class Controller {
+abstract class Controller
+{
 
     protected $view;
 
@@ -17,26 +23,60 @@ abstract class Controller {
     protected $params;
 
     /**
-     * @SPF:DmManaged
+     * Constructor
+     *
+     * @param array $options Currently not implemented, but this would be an array of options defined in the routes
+     *                       file.
      */
     public function __construct($options = array())
     {}
 
-    public function setParams($params)
+    /**
+     * Sets parameters
+     *
+     * This gets set during {@link SPF\Application::run} and is set with path parameters from the matched route.
+     *
+     * @param array $params Array of named parameters from the matched route.
+     *
+     * @return SPF\Core\Controller Returns self to enable chaining
+     */
+    public function setParams($params = array())
     {
         $this->params = $params;
+
+        return $this;
     }
 
+    /**
+     * Returns the named parameter.
+     *
+     * @param string $name The name of the parameter to get.
+     *
+     * @return string|null returns the parameter value or null if it doesn't exist.
+     */
     public function getParam($name)
     {
         return array_key_exists($name, $this->params) ? $this->params[$name] : null;
     }
 
+    /**
+     * Returns the currently set View
+     *
+     * @return string|SPF\Core\View View can be either an instance of {@link SPF\Core\View} or a string representing a
+     *                              template file path.
+     */
     public function getView()
     {
         return $this->view;
     }
 
+    /**
+     * Set View to either an instance of {@link SPF\Core\View} or a string representing a template file path.
+     *
+     * @param string|SPF\Core\View $view Either an instance of {@link SPF\Core\View} or a template file path.
+     *
+     * @return SPF\Core\Controller Returns self to enable chaining
+     */
     public function setView($view)
     {
         $this->view = $view;
@@ -44,11 +84,26 @@ abstract class Controller {
         return $this;
     }
 
+    /**
+     * Returns the currently set model data which can be any parsable PHP data type, or an instance of
+     *     {@link SPF\Core\Model}
+     *
+     * @return Mixed[] Any Mustache renderable data type.
+     */
     public function getModel()
     {
         return $this->model;
     }
 
+    /**
+     * Sets the data to model.  This can be any Mustache parsable data type, preferably an instance of
+     *     {@link SPF\Core\Model}
+     *
+     * @param Mixed[] $data Any Mustache renderable data type, typically an array or preferably an instance of
+     *                      {@link SPF\Core\Model}
+     *
+     * @return SPF\Core\Controller Returns self to enable chaining
+     */
     public function setModel($data)
     {
         $this->model = $data;
@@ -57,17 +112,15 @@ abstract class Controller {
     }
 
     /**
-     * Will return either a rendered view or just the model data
+     * Get rendered view content or model data as JSON.
      *
-     * If the view is set to a string, it will treat it as a template path and create a new View
+     * This will first check if the {@link SFP\HTTP\Response} is set to render JSON.  If it is, this returns just the
+     *     model.
+     *     If Response is not JSON, will then inspect the {@link SPF\Core\Controller:view} property.  If View is
+     *     a string, it will create a new View instance using that string as the template source.  If View is already an
+     *     instance of {@link SPF\Core\View} it will call {@link SPF\Core\View::render()} using the current model data.
      *
-     * It will then attempt to call the view render on the view if it exists.
-     *
-     * If not, it will return the model data (which can be null)
-     *
-     * @method getContent
-     *
-     * @return mixed
+     * @return Mixed[] Either a formated string output, or the current model data (which will be serialized by PHP)
      */
     public function getContent()
     {
