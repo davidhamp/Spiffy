@@ -75,17 +75,20 @@ class Application
             $matchedRoute = $router->getMatchedRoute();
 
             $controller = DependencyManager::get($matchedRoute['controller']);
-            $controller->setParams($matchedRoute['params']);
 
             if (!($controller instanceof Controller)) {
                 throw new ControllerException(
-                    "The specified controller class " . $matchedRoute['controller'] . " doesn't exist or isn't a valid Controller class"
+                    "The specified controller class "
+                        . $matchedRoute['controller']
+                        . " doesn't exist or isn't a valid Controller class"
                 );
             }
 
             if (!method_exists($controller, $matchedRoute['method'])) {
                 throw new ControllerException("The defined method does not exist in the controller class");
             }
+
+            $controller->setParams($matchedRoute['params']);
 
             $controller->{$matchedRoute['method']}();
             $response->setBody($controller->getContent());
@@ -96,6 +99,7 @@ class Application
 
         } else {
             $response->setStatusCode(404);
+            $response->setBody('SPF: The requested route was not found.');
         }
     }
 
