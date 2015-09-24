@@ -15,13 +15,23 @@ use SPF\Core\ReflectionPool;
 use \reflectionClass;
 
 /**
- * Static because this gets used by the Dependency Manager
+ * Annotation processing engine.
+ * 
+ * Uses PHP Reflection to inspect given class properties and methods and returns a set of Annotations as 
+ * {@link SPF\Annotations\AnnotationSet}.
+ * 
+ * @uses SPF\Annotations\AnnotationSet
+ * @uses reflectionClass
  */
 class Engine
 {
 
-    // This class should not only be responsible for creating the reflection class instances, but it should also cache
-    // results of parsed annotations so that multiples of the same object don't have to be re-parsed.
+    /**
+     * Parse annotations are stored here, so parsing annotations on a collection of the same object type won't
+     * result in unecessary work.
+     * 
+     * @var array
+     */
     static protected $annotationCache = array();
 
     /**
@@ -33,6 +43,27 @@ class Engine
      */
     static protected $annotationTagspace = 'SPF';
 
+    /**
+     * Gets all SPF Annotations given a subject
+     * 
+     * Subject can be either a fully qualified class name string, or an instance of the object in question.
+     * This will then parse the docblock associated with the given element within the class reflection and
+     * look for @SPF: annotations (from the {@link SPF\Annotations\Engine:$annotationTagSpace}).  
+     * This then returns an AnnotationSet containing all found annotations (or an empty AnnotationSet if none
+     * are found).
+     * 
+     * @param string|object $subject                  Class name string or object instance to inspect
+     * @param 'constructor'|'method'|'property' $type String value that should only be 'constructor', 'method', or 'property', and an Exception will 
+     *                                                be thrown if the value is anything but those three.  
+     *                                                Determines what type of elementon the ojbect you wish to inspect for annotations.  
+     *                                                Defaults to 'constructor'.
+     * @param string        $element                  Element name of property or method.  Unecessary if $type is 'constructor', but will 
+     *                                                throw an Exception if omitted when $type is 'method' or 'property'
+     * 
+     * @throws SPF\Exceptions\AnnotationEngineException
+     * 
+     * @return SPF\Annotations\AnnotationSet
+     */
     static public function get($subject, $type = 'constructor', $element = null)
     {
         $className = (is_string($subject) && class_exists($subject))
