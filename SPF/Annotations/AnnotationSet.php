@@ -12,7 +12,7 @@ namespace SPF\Annotations;
 /**
  * Annotation container always returned by {@link SPF\Annotations\Engine::get()}
  * 
- * @todo Update to use Iterator for traversing over annotations
+ * @todo Update to use Iterator for traversing over annotations in the set
  */
 class AnnotationSet
 {
@@ -71,6 +71,26 @@ class AnnotationSet
 
     /**
      * Returns all annotations or a subset of annotations based on annotation name
+     * 
+     * Annotations are grouped by annotation name as an array such as
+     * 
+     * When inspecting annotation parameters they are indexed in the order they are defined in the annotation.
+     * 
+     * Example:
+     * ```
+     * @SPF:AnnotationTest Param1 Param2
+     * @SPF:AnnotationTest Param3 Param4
+     * ```
+     * ```
+     * $annotationSet->get('AnnotationTest')
+     * ```
+     * would result in
+     * ```
+     * array(
+     *     array(Param1, Param2),
+     *     array(Param3, Param4)
+     * )
+     * ```
      * 
      * @param string $annotation Name of annotation to retrieve from the set.  Will return all annotations if set to null
      * 
