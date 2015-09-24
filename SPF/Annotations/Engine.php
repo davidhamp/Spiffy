@@ -20,7 +20,14 @@ use \reflectionClass;
  * Uses PHP Reflection to inspect given class properties and methods and returns a set of Annotations as 
  * {@link SPF\Annotations\AnnotationSet}.
  * 
- * @uses SPF\Annotations\AnnotationSet
+ * Annotations are tags placed within a property or method's docComment block.  These take the form of
+ * @SPF:AnnotationName.  Annotations are "namespaced" to @SPF: to avoid conflict with other annotation implementations
+ * such as PHPDocs or IDE tagging.
+ * 
+ * The annotation can also have one or more parameters separated by spaces.  When returned in an Annotation set, these 
+ * parameters are indexes in the array you get back when requesting annotations.
+ * 
+ * @see SPF\Annotations\AnnotationSet
  * @uses reflectionClass
  */
 class Engine
