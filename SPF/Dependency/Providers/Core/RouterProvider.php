@@ -13,6 +13,8 @@ use SPF\HTTP\Request;
 use SPF\Dependency\Provider;
 use Symfony\Component\Yaml\Yaml;
 use SPF\Core\Router;
+use SPF\Dependency\DependencyManager;
+use SPF\Dependency\Registry;
 
 /**
  * Router Provider
