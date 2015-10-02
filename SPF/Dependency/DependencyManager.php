@@ -201,7 +201,7 @@ class DependencyManager
     {
         if (class_exists($className)) {
 
-            $annotations = AnnotationEngine::get($className);
+            $annotations = AnnotationEngine::get($className, 'constructor');
 
             if ($annotations->has('DmManaged')) {
                 if ($provider = $annotations->get('DmProvider')) {
@@ -254,9 +254,13 @@ class DependencyManager
     static protected function getProvider($className)
     {
         foreach (self::$providerLocations as $providerLocation) {
-            $className = preg_replace('/^' . $providerLocation[0] . '/', $providerLocation[1], $className) . 'Provider';
-            if (class_exists($className)) {
-                $class = new $className();
+            if (!preg_match('/^' . $providerLocation[0] .'\\\\/', $className)) {
+                continue;
+            }
+
+            $provider = preg_replace('/^' . $providerLocation[0] . '/', $providerLocation[1], $className) . 'Provider';
+            if (class_exists($provider)) {
+                $class = new $provider();
                 return $class->load();
             }
         }

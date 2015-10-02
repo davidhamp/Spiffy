@@ -43,7 +43,6 @@ class Application
     {
         $exceptionHandler = new Handler($environment);
         DependencyManager::set('ExceptionHandler', $exceptionHandler);
-
         DependencyManager::set('Environment', $environment);
 
         if (!defined('__BASE__')) {
@@ -76,6 +75,10 @@ class Application
         if ($router->matchRoute()) {
             $matchedRoute = $router->getMatchedRoute();
 
+            if (isset($matchedRoute['contentType'])) {
+                $response->setContentType($matchedRoute['contentType']);
+            }
+
             $controller = DependencyManager::get($matchedRoute['controller']);
 
             if (!($controller instanceof Controller)) {
@@ -95,25 +98,11 @@ class Application
             $controller->{$matchedRoute['method']}();
             $response->setBody($controller->getContent());
 
-            if (isset($matchedRoute['contentType'])) {
-                $response->setContentType($matchedRoute['contentType']);
-            }
-
         } else {
             $response->setStatusCode(404);
             $response->setBody('SPF: The requested route was not found.');
         }
-    }
 
-    /**
-     * Sends the response during script clean up.
-     *
-     * The {@link SPF\HTTP\Response} is sent during the destruct of the Application class.
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
         $response = DependencyManager::get(Registry::RESPONSE);
         $response->send();
     }

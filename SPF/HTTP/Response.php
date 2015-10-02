@@ -138,6 +138,15 @@ class Response
     }
 
     /**
+     * Returns the current Response HTTP status code
+     *
+     * @return int
+     */
+    public function getStatusCode() {
+        return $this->statusCode;
+    }
+
+    /**
      * Sets HTTP response code
      *
      * @param int $code Response code, such as 200 or 404.
