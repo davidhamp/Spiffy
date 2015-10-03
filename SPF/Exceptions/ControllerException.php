@@ -10,4 +10,6 @@
 namespace SPF\Exceptions;
 
 class ControllerException extends \Exception
-{}
+{
+    public $code = 'SPF200';
+}

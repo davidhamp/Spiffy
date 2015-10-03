@@ -10,4 +10,6 @@
 namespace SPF\Exceptions;
 
 class EnvironmentException extends \Exception
-{}
+{
+    public $code = 'SPF102';
+}

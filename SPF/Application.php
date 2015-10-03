@@ -19,8 +19,8 @@ use SPF\Core\Controller;
 /**
  * SPF Main Application
  *
- * Main Application class.  This should be instantiated in your project bootstrap file, and is kicked off by calling
- *     the {@link SPF\Application::run()} method.
+ * Main Application class.  This should be instantiated in your project bootstrap file, and is kicked off by calling the
+ * {@link SPF\Application::run()} method.
  *
  * @uses SPF\Dependency\DependencyManager
  */
@@ -30,7 +30,7 @@ class Application
      * Application Constructor
      *
      * When Application is created, it sets up the {@link SPF\Exceptions\Handler} and checks for required application
-     *     constants __BASE__ and __PROJECT_NAMESPACE__
+     * constants __BASE__ and __PROJECT_NAMESPACE__
      *
      * @param  string $environment Used to make output decisions in code depending on your intended environement.  This
      *                            gets set to the {@link SPF\Dependency\DependencyManager} under 'Environment'
@@ -58,9 +58,9 @@ class Application
      * Kicks off the SPF Application
      *
      * Attempts to match the current router with {@link SPF\Core\Router}.  If a route is found, this will attempt to
-     *     instantiate the specified controller and ultimately call the specified method on the controller.
-     *     Finally, the Application will attempt to set the controller's content on the {@link SPF\HTTP\Response}.
-     *     Otherwise this will set the status code to 404.
+     * instantiate the specified controller and ultimately call the specified method on the controller. Finally, the
+     * Application will attempt to set the controller's content on the {@link SPF\HTTP\Response}.  Otherwise this will
+     * set the status code to 404.
      *
      * @uses SPF\Core\Router
      * @uses SPF\HTTP\Response

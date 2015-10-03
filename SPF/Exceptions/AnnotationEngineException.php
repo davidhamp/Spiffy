@@ -10,4 +10,6 @@
 namespace SPF\Exceptions;
 
 class AnnotationEngineException extends \Exception
-{}
+{
+    public $code = 'SPF104';
+}

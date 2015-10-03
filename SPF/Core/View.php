@@ -17,7 +17,7 @@ use SPF\Dependency\Registry;
  * The bridge between the current application view's model data and the Mustache template parsing engine.
  *
  * When {@link SPF\Core\View::render()} is called, it will take the accepted data and render it through the
- *     MustacheEngine required by SPF.
+ * MustacheEngine required by SPF.
  */
 class View
 {
@@ -52,7 +52,7 @@ class View
 
     /**
      * Takes the fed in data and runs it through MustacheEngine->render() using the currently defined
-     *     template file path.
+     * template file path.
      *
      * @param Mixed[] $data Any parsable data object, but preferably an instance of {@link SPF\Core\Model}
      *

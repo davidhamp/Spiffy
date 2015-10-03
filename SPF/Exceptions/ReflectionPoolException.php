@@ -10,4 +10,6 @@
 namespace SPF\Exceptions;
 
 class ReflectionPoolException extends \Exception
-{}
+{
+    public $code = 'SPF101';
+}

@@ -16,12 +16,11 @@ use \Traversable;
 /**
  * Recommended container for modeled data.
  *
- * Models in your project should extend off this base class.
- *     This model will attempt to strictly adhere to the defined model elements when using a Traversable data set
- *     in the contstructor or through the {@link SPF\Core\Model::loadData()} method.
- *     It utilizes the JsonSerializable interface as well as the {@link SPF\Annotations\Engine} class in order to
- *     control JSON serialized output.
- *     You may use the @SPF:JsonIgnore Annoation on model properties in order to hide them from JSON Serialization.
+ * Models in your project should extend off this base class.  This model will attempt to strictly adhere to the defined
+ * model elements when using a Traversable data set in the contstructor or through the
+ * {@link SPF\Core\Model::loadData()} method.  It utilizes the JsonSerializable interface as well as the
+ * {@link SPF\Annotations\Engine} class in order to control JSON serialized output.  You may use the
+ * @SPF:JsonIgnore Annoation on model properties in order to hide them from JSON Serialization.
  *
  * @uses SPF\Annotations\Engine
  * @uses JsonSerializable
@@ -47,11 +46,11 @@ class Model implements JsonSerializable
      * Initilizes or updates model property values
      *
      * Takes an Traversable data set, and will attempt to update model properties that correspond to the key names
-     *     of the array.  This will prioritize using 'set' methods on the model instance, which are methods that have
-     *     the same key value prepended with 'set'.
-     *     _Example_: the method 'setUserName()' would be called when encountering the array key 'userName'.  If no
-     *     'set' method is defined in the model, it will double check for that the named property exists.
-     *     If it doesn't, the array value will be skipped.
+     * of the array.  This will prioritize using 'set' methods on the model instance, which are methods that have
+     * the same key value prepended with 'set'.
+     * _Example_: the method 'setUserName()' would be called when encountering the array key 'userName'.  If no
+     * 'set' method is defined in the model, it will double check for that the named property exists.
+     * If it doesn't, the array value will be skipped.
      *
      * @param array $data Array data to load into the model
      *
@@ -89,7 +88,7 @@ class Model implements JsonSerializable
      * JsonSerializable interface
      *
      * Loops over teh properties in the model and inspects their annotations.  If the SPF:JsonIgnore annotation is
-     *     present, the propery is skipped.
+     * present, the propery is skipped.
      *
      * @return array Array of property values as per JsonSerializable interface.
      */

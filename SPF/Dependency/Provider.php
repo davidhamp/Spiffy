@@ -17,9 +17,8 @@ abstract class Provider
     /**
      * Should return an instance of the provided class.
      *
-     * Load is called by the DependencyManager and should be responsible for setting up all required dependencies
-     *     of the class the Provider is meant to handle.  Load should return an instance of the class it's associated
-     *     with.
+     * Load is called by the DependencyManager and should be responsible for setting up all required dependencies of
+     * the class the Provider is meant to handle.  Load should return an instance of the class it's associated with.
      *
      * @return Mixed[] Provided class instance.
      */

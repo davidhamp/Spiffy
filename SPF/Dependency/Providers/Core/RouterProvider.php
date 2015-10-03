@@ -9,7 +9,6 @@
 
 namespace SPF\Dependency\Providers\Core;
 
-use SPF\HTTP\Request;
 use SPF\Dependency\Provider;
 use Symfony\Component\Yaml\Yaml;
 use SPF\Core\Router;
@@ -19,8 +18,8 @@ use SPF\Dependency\Registry;
 /**
  * Router Provider
  *
- * Parses the routes.yaml file which is expected to be in your project's __BASE__ path under /configs.  Then creates
- *     a {@link SPF\Core\Router} instance.
+ * Parses the routes.yaml file which is expected to be in your project's __BASE__ path under /configs.  Then creates a
+ * {@link SPF\Core\Router} instance.
  *
  * @uses SPF\HTTP\Request
  * @uses Symfony\Component\Yaml\Yaml

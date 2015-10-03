@@ -59,9 +59,8 @@ class Database
      * Returns a PDO connection to the corresponding mysql database defined in the config
      *
      * Inspects the 'database' config values and looks for mysql section.  If mysql is found, it will use all of the
-     *     appropriate settings to create a PDO instance.
-     *     If no id is provided, it will default to the first db defined.
-     *     If no db is defined, or if the config is missing required information this will throw an exception.
+     * appropriate settings to create a PDO instance. If no id is provided, it will default to the first db defined.
+     * If no db is defined, or if the config is missing required information this will throw an exception.
      *
      * @param  int $id Database id from the configuration (array index)
      *

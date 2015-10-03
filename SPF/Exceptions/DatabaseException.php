@@ -10,4 +10,6 @@
 namespace SPF\Exceptions;
 
 class DatabaseException extends \Exception
-{}
+{
+    public $code = 'SPF300';
+}

@@ -21,38 +21,37 @@ use \Closure;
  * This class was designed static so that it could be ubiquitous throughout the framework.
  *
  * It stores objects by a given keyname and retrieves the objects when using the
- *     {@link SPF\Dependency\DependencyManager::get()} method.
+ * {@link SPF\Dependency\DependencyManager::get()} method.
  *
  * When using fully qualified class names as keys, this class will attempt to find the corresponding class, resolve it's
- *     dependencies, and store a singleton instance of the class for later retrieval.  All dependencies resolved this
- *     way are also stored as singelton instances in the object storage container.
+ * dependencies, and store a singleton instance of the class for later retrieval.  All dependencies resolved this way
+ * are also stored as singelton instances in the object storage container.
  *
- * If you wish to have the class's dependencies managed, or if your class is a dependency for another class,
- *     you need to add a @SPF:DmManaged tag.
+ * If you wish to have the class's dependencies managed, or if your class is a dependency for another class, you need
+ * to add a @SPF:DmManaged tag.
  *
  * There are two ways in which dependencies can be managed.
  *
  * The first method is to define a Provider for the class.  The provider must extend
- *     {@link SPF\Dependency\Providers\Provider} which only has a
- *     {@link SPF\Dependency\Providers\Provider::load()} method.
- *     You can use this to manually resolve dependencies for your class, such as parsed yaml configs, or
- *     non-singleton class instances.  The return value of this load method should be a new instance of your class
- *     with all of it's required dependencies injected into it's constructor.
+ * {@link SPF\Dependency\Providers\Provider} which only has a {@link SPF\Dependency\Providers\Provider::load()} method.
+ * You can use this to manually resolve dependencies for your class, such as parsed yaml configs, or non-singleton
+ * class instances.  The return value of this load method should be a new instance of your class with all of it's
+ * required dependencies injected into it's constructor.
  *
  * To use this mthod, you'll need to have a Provider with the same name as your class appended with 'Provider'.  This
- *     Provider should be in your project's ProviderLocation path, which you can define in your bootstrap using the
- *     {@link SPF\Dependency\DependencyManager::addProviderLocation()} method.  New ProviderLocations are searched first
- *     so you can override SPF level class Providers with Providers in your project.
+ * Provider should be in your project's ProviderLocation path, which you can define in your bootstrap using the
+ * {@link SPF\Dependency\DependencyManager::addProviderLocation()} method.  New ProviderLocations are searched first so
+ * you can override SPF level class Providers with Providers in your project.
  *
  * Alternatively you can define your provider using the @SPF:DmProvider <namespace\path\to\provider> Annotation.
  *
  * The second method of dependency management is to define the class paths for all of the dependencies of your class's
- *     constructor.  Each requirement needs a @SPF:DmRequires <namespace\path\to\requirement> $<paramName> tag.
- *     If the number of requirements doesn't match the number of actual required parameters for the class, this will
- *     throw an exeption.
+ * constructor.  Each requirement needs a @SPF:DmRequires <namespace\path\to\requirement> $<paramName> tag. If the
+ * number of requirements doesn't match the number of actual required parameters for the class, this will throw
+ * an exeption.
  *
  * In all instances, the instance of the object created through any of these means is stored in the object storage for
- *     later retrieval.  Therefore, you should only use the DM for singelton use cases for now.
+ * later retrieval.  Therefore, you should only use the DM for singelton use cases for now.
  *
  * @see SPF\Dependency\Providers\Provider
  *
@@ -81,7 +80,7 @@ class DependencyManager
      * Sets an item into the object storage
      *
      * While this method is public, it's mainly used to store singleton instances of classes into the $object pool.
-     *     However it can be handy to store arbitrary data into the DM for carrying data between scopes.
+     * However it can be handy to store arbitrary data into the DM for carrying data between scopes.
      *
      * @param string $name   Keyname to under which to store the object.
      * @param mixed  $object Object to store.
@@ -132,7 +131,7 @@ class DependencyManager
      * Adds a new provider location for provider lookup fallbacks.
      *
      * With this method you can define project-level provider locations which will be included when searching for
-     *     providers for any requested objects.
+     * providers for any requested objects.
      *
      * @param string $namespace Namespace search string
      * @param string $location  Namespace replacement string provider location.
@@ -182,14 +181,14 @@ class DependencyManager
      * Attempts to fetch an instance of a managed class while resolving all of it's dependencies.
      *
      * If the $className is found by the autoloader, this will then utilize {@link SPF\Annotations\Engine} to inspect
-     *     the class' constructor for an @SPF:DmManaged annotation.  If one exists, it will then look for
-     *     an @SPF:DmProvider annotation.  This allows users to manually define a Provider outside of the regular
-     *     Provider search path.  If a provider is specified in this way, bu the provider doesn't exist, this will throw
-     *     an exception.  If no @SPF:DmProvider tag is present, it will then inspect the required arguments for the
-     *     constructor and compare those with the @SPF:DmRequires annotations.  The @SPF:DmRequires annotations take
-     *     two parameters.  The first is the fully qualified classname of the dependency, and the second is the
-     *     parameter name in the contructor (including the dollar sign).  If not all of the required class parameters
-     *     have a corresponding DmRequires annotation this will throw an exception.
+     * the class' constructor for an @SPF:DmManaged annotation.  If one exists, it will then look for an
+     * @SPF:DmProvider annotation.  This allows users to manually define a Provider outside of the regular Provider
+     * search path.  If a provider is specified in this way, bu the provider doesn't exist, this will throw an
+     * exception.  If no @SPF:DmProvider tag is present, it will then inspect the required arguments for the
+     * constructor and compare those with the @SPF:DmRequires annotations.  The @SPF:DmRequires annotations take two
+     * parameters.  The first is the fully qualified classname of the dependency, and the second is the parameter name
+     * in the contructor (including the dollar sign).  If not all of the required class parameters have a corresponding
+     * DmRequires annotation this will throw an exception.
      *
      * @param string $className Fully qualified classname to resolve.
      *
@@ -243,7 +242,7 @@ class DependencyManager
 
     /**
      * Searches for a matching provider based on the providerLocations defined in this class.  If one is found
-     *     this will instantiate it, and return the output of the provider's load method.
+     * this will instantiate it, and return the output of the provider's load method.
      *
      * @param string $className Class to resolve.
      *

@@ -29,8 +29,8 @@ class Router
     /**
      * Constructor
      *
-     * Requires a parsed route config and an instance of {@link SPF\HTTP\Request} to compare with.
-     *     This class uses a provider to parse the routes.yaml file.
+     * Requires a parsed route config and an instance of {@link SPF\HTTP\Request} to compare with.  This class uses a
+     * provider to parse the routes.yaml file.
      *
      * @param array            $routes  Parsed routes.yaml config values
      * @param SPF\HTTP|Request $request Request object instance.
@@ -52,22 +52,22 @@ class Router
      * Inspects the current request and attempts to match it to a route.
      *
      * This will take the current uri from the request and attempt to match it to a route defined in your project's
-     *     routes.yaml file.  Your routes.yaml file should contain an array of elements which describe your routes, as
-     *     well as the controllers, methods, and request methods required by the route.
-     *     An example routes.yaml file will look like this:
-     *         '/route/one':
-     *             controller: 'Namespace\Path\To\ControllerOne\{PATH_PARAM}'
-     *             method:     'methodToCall'
-     *             requestMethod: 'GET'
-     *             contentType: 'application/json'
-     *             description: 'Description for the humans'
-     *         '/route/two/':
-     *             controller: 'Namespace\Path\To\ControllerTwo\'
-     *             method: 'methodToCallToo'
-     *             requestMethod: 'GET'
-     *             contentType: 'text/html'
-     *             description: 'Humans require descriptions'
-     *     When a route is found, it's matched data will be stored in {@link SPF\Core\Router::$currentRoute}
+     * routes.yaml file.  Your routes.yaml file should contain an array of elements which describe your routes, as
+     * well as the controllers, methods, and request methods required by the route.
+     * An example routes.yaml file will look like this:
+     *     '/route/one':
+     *         controller: 'Namespace\Path\To\ControllerOne\{PATH_PARAM}'
+     *         method:     'methodToCall'
+     *         requestMethod: 'GET'
+     *         contentType: 'application/json'
+     *         description: 'Description for the humans'
+     *     '/route/two/':
+     *         controller: 'Namespace\Path\To\ControllerTwo\'
+     *         method: 'methodToCallToo'
+     *         requestMethod: 'GET'
+     *         contentType: 'text/html'
+     *         description: 'Humans require descriptions'
+     * When a route is found, it's matched data will be stored in {@link SPF\Core\Router::$currentRoute}
      *
      * @return boolean Returns true or false depending on whether or not the Router found a matched route.
      */
@@ -111,7 +111,7 @@ class Router
      * Route validation logic
      *
      * Abstracted out so route validation could be maintained outside of the matched route handling.  Will look at the
-     *     current request and ensure it meets criteria defined in the route.  Namely, the current requestMethod.
+     * current request and ensure it meets criteria defined in the route.  Namely, the current requestMethod.
      *
      * @internal
      *

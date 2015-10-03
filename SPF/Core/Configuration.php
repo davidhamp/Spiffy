@@ -15,7 +15,7 @@ use Symfony\Component\Yaml\Yaml;
  * Configuration setting storage class
  *
  * Provides storage for your project's configuration settings.  Expects a 'config.yaml' file in your project's path
- *     (<PROJECT_PATH>/configs/config.yaml)
+ * (<PROJECT_PATH>/configs/config.yaml)
  *
  * @uses Symfony\Component\Yaml\Yaml
  */

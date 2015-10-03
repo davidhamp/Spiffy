@@ -28,10 +28,10 @@ class ReflectionPool
      * Fetches an instance of the requested ReflectionClass.
      *
      * The {@link SPF\Annotations\Engine} as well as {@link SPF\Dependency\DependencyManager} require PHP reflection
-     *     in order to make decisions based on the structure SPF classes or phpDoc annotations.  This is a centralized,
-     *     static resource for caching these PHP reflectionClass instances.  If the className doesn't exist in the
-     *     pool already, it will create a new instance and store that in the pool before returning it.  If the className
-     *     doesn't exist, it will throw an {@link SPF\Exceptions\ReflectionPoolException} Exception.
+     * in order to make decisions based on the structure SPF classes or phpDoc annotations.  This is a centralized,
+     * static resource for caching these PHP reflectionClass instances.  If the className doesn't exist in the
+     * pool already, it will create a new instance and store that in the pool before returning it.  If the className
+     * doesn't exist, it will throw an {@link SPF\Exceptions\ReflectionPoolException} Exception.
      *
      * @param string $className The fully qualified className
      *

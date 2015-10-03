@@ -12,11 +12,10 @@ namespace SPF\Dependency;
 /**
  * This constants file is used for maintanability of DM managed classes.
  *
- * If any of said classes need to be refactored
- *     You would only have to change the ClassName in this file, rathr than hunt down all instances of
- *     {@link SPF\Dependency\DependencyManager::get()} using the class' name.  It is recommended you extend this
- *     constants file with one in your own project fand use only the project-level constants file throughout, even for
- *     SPF classes.
+ * If any of said classes need to be refactored, you would only have to change the ClassName in this file, rathr than
+ * hunt down all instances of {@link SPF\Dependency\DependencyManager::get()} using the class' name.  It is recommended
+ * you extend this constants file with one in your own project fand use only the project-level constants file
+ * throughout, even for SPF classes.
  */
 class Registry
 {

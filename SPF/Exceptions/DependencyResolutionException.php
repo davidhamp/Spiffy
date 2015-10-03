@@ -11,5 +11,5 @@ namespace SPF\Exceptions;
 
 class DependencyResolutionException extends \Exception
 {
-    public $code = 100;
+    public $code = 'SPF100';
 }

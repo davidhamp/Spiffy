@@ -10,4 +10,6 @@
 namespace SPF\Exceptions;
 
 class SetupException extends \Exception
-{}
+{
+    public $code = 'SPF103;
+}
