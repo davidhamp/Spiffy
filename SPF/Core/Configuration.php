@@ -10,6 +10,7 @@
 namespace SPF\Core;
 
 use Symfony\Component\Yaml\Yaml;
+use SPF\Dependency\DependencyManager;
 
 /**
  * Configuration setting storage class
