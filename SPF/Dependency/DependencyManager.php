@@ -200,7 +200,10 @@ class DependencyManager
     {
         if (class_exists($className)) {
 
-            $annotations = AnnotationEngine::get($className, 'constructor');
+            $annotations = AnnotationEngine::get($className);
+            if (!$annotations->has('DmManaged')) {
+                $annotations = AnnotationEngine::get($className, 'constructor');
+            }
 
             if ($annotations->has('DmManaged')) {
                 if ($provider = $annotations->get('DmProvider')) {
@@ -212,20 +215,22 @@ class DependencyManager
                     }
                 }
 
-                $reqs = $annotations->get('DmRequires');
+                $constructor = ReflectionPool::get($className)->getConstructor();
 
                 $dependencies = array();
-                foreach ($annotations->reflection->getParameters() as $parameter) {
+                $reqs = $annotations->get('DmRequires');
+                foreach ($constructor->getParameters() as $parameter) {
                     if (!$parameter->isOptional()) {
                         foreach ($reqs as $req) {
                             if (substr($req[1], 1) === $parameter->name) {
                                 array_push($dependencies, self::get($req[0]));
+                                break;
                             }
                         }
                     }
                 }
 
-                if (count($dependencies) < $annotations->reflection->getNumberOfRequiredParameters()) {
+                if (count($dependencies) < $constructor->getNumberOfRequiredParameters()) {
                     throw new DependencyResolutionException('You must declare all required dependencies for this class');
                 }
 
