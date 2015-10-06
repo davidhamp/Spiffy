@@ -12,6 +12,8 @@ namespace SPF\Dependency\Providers\Mustache;
 use SPF\Dependency\Provider;
 use Mustache_Engine;
 use Mustache_Loader_FilesystemLoader;
+use SPF\Dependency\DependencyManager;
+use SPF\Dependency\Registry;
 
 /**
  * Creates an instance of Mustache_Engine
