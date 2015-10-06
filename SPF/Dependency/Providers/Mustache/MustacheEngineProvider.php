@@ -28,10 +28,15 @@ class MustacheEngineProvider extends Provider
 {
     public function load()
     {
-        $options = array(
-            'loader' => new Mustache_Loader_FilesystemLoader(__BASE__ . '/views'),
-            'partials_loader' => new Mustache_Loader_FilesystemLoader(__BASE__ . '/views/partials')
-        );
+        $options = array();
+
+        if ($templatePath = DependencyManager::get(Registry::CONFIGURATION)->get('templatePath')) {
+            $options['loader'] = new Mustache_Loader_FilesystemLoader($templatePath);
+        }
+
+        if ($templatePartialsPath = DependencyManager::get(Registry::CONFIGURATION)->get('templatePartialsPath')) {
+            $options['partials_loader'] = new Mustache_Loader_FilesystemLoader($templatePartialsPath);
+        }
 
         return new Mustache_Engine($options);
     }

@@ -36,7 +36,10 @@ class Configuration
      */
     public function __construct()
     {
-        $this->config = Yaml::parse(__BASE__ . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'config.yaml');
+        $this->config = Yaml::parse(
+            __BASE__ . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR
+            . 'config.' . DependencyManager::get('Environment') . '.yaml'
+        );
     }
 
     /**
